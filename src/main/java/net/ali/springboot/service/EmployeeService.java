@@ -6,5 +6,6 @@ import net.ali.springboot.model.Employee;
 
 public interface EmployeeService {
 	List<Employee> getAllEmployee(); 
+	void saveEmployee(Employee e);
 
 }
