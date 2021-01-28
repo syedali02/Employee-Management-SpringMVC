@@ -7,5 +7,7 @@ import net.ali.springboot.model.Employee;
 public interface EmployeeService {
 	List<Employee> getAllEmployee(); 
 	void saveEmployee(Employee e);
+	Employee getEmployeebyID(long Id);
+	void deleteEmployee(long id);
 
 }

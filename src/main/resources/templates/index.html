@@ -17,14 +17,18 @@
 		<th>Employee First Name </th>
 		<th>Employee Last Name </th>
 		<th>Employee Email </th>
+		<th>Actions </th>
 		</tr>
 	</thead>
 	<tbody>
-	<!--These are thymleaf directives here  -->
+	<!--These are Thymleaf directives here  -->
 	<tr th:each="employee : ${ListEmployees}"> 
 	<td th:text="${employee.firstName}"></td>
 	<td th:text="${employee.lastName}"></td>
 	<td th:text="${employee.email}"></td>
+	<td><a th:href="@{/showFormforUpdate/{id}(id=${employee.id})}" class="btn btn-primary">UPDATE</a>
+	<a th:href="@{/deleteEmployee/{id}(id=${employee.id})}" class="btn btn-primary">DELETE</a>
+	</td>
 	</tr>
 	</tbody>
 </table>
