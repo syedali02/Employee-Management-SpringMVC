@@ -1,6 +1,9 @@
 package net.ali.springboot.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +24,7 @@ public class EmployeeController {
 	@GetMapping("/")
 	public String viewHomePage(Model model)
 	{
-		model.addAttribute("ListEmployees", empService.getAllEmployee());
-		return  "index";
+		return findPagination(1, model);
 	}
 	
 	@GetMapping("/ShowNewEmployeeForm")
@@ -55,6 +57,20 @@ public class EmployeeController {
 	public String deleteEmployeeById(@PathVariable (value="id") long Id) {
 		empService.deleteEmployee(Id);
 		return "redirect:/";
+	}
+	
+	@GetMapping("/page/{pageNo}")
+	public String findPagination(@PathVariable( value="pageNo") int pageNo, Model model) {
+		int pageSize=5;
+		
+		Page<Employee> page= empService.findPaginated(pageNo, pageSize);
+		List<Employee> listEmployees = page.getContent();
+		
+		model.addAttribute("currentPage", pageNo);
+		model.addAttribute("totalPages", page.getTotalPages());
+		model.addAttribute("totalitems", page.getTotalElements());
+		model.addAttribute("ListEmployees", listEmployees);
+		return "index";
 	}
 	
 }
