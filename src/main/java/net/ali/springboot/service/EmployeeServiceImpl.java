@@ -4,6 +4,8 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.sun.el.stream.Optional;
@@ -44,10 +46,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public void deleteEmployee(long id) {
 		empRepo.deleteById(id);
 	}
-
+	
 	@Override
-	public Page<Employee> findPaginated(int pageNo, int pageSize) {
-		org.springframework.data.domain.Pageable pageable = PageRequest.of(pageNo-1, pageSize);
+	public Page<Employee> findPaginated(int pageNo, int pageSize,String sortField, String sortDir) {
+		//Creating sort class to check if the sortDir is in ascending/descending
+		Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).descending() : Sort.by(sortField).ascending(); 
+		org.springframework.data.domain.Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 		return this.empRepo.findAll(pageable);
 	}
 

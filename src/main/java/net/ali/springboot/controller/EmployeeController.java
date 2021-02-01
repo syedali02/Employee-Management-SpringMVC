@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import net.ali.springboot.model.Employee;
 import net.ali.springboot.service.EmployeeService;
@@ -24,7 +25,7 @@ public class EmployeeController {
 	@GetMapping("/")
 	public String viewHomePage(Model model)
 	{
-		return findPagination(1, model);
+		return findPagination(1,"firstName","asc", model);
 	}
 	
 	@GetMapping("/ShowNewEmployeeForm")
@@ -59,17 +60,25 @@ public class EmployeeController {
 		return "redirect:/";
 	}
 	
+	// Our url is going to be /page/1?sortField=name&sortDir=asc
 	@GetMapping("/page/{pageNo}")
-	public String findPagination(@PathVariable( value="pageNo") int pageNo, Model model) {
+	public String findPagination(@PathVariable( value="pageNo") int pageNo,
+			 @RequestParam("sortField") String sortField, 
+			 @RequestParam("sortDir") String sortDir,Model model) {
 		int pageSize=5;
 		
-		Page<Employee> page= empService.findPaginated(pageNo, pageSize);
+		Page<Employee> page= empService.findPaginated(pageNo, pageSize,sortField,sortDir);
 		List<Employee> listEmployees = page.getContent();
 		
 		model.addAttribute("currentPage", pageNo);
 		model.addAttribute("totalPages", page.getTotalPages());
 		model.addAttribute("totalitems", page.getTotalElements());
 		model.addAttribute("ListEmployees", listEmployees);
+		
+		model.addAttribute("sortField", sortField);
+		model.addAttribute("sortDirection", sortDir);
+		model.addAttribute("reversesortDir", sortDir.equals("asc")?"desc":"asc");
+		
 		return "index";
 	}
 	
