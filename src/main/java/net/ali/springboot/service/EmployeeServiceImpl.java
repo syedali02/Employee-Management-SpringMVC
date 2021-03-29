@@ -55,5 +55,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return this.empRepo.findAll(pageable);
 	}
 
+	public void doSomething(){
+	}
+
 
 }
